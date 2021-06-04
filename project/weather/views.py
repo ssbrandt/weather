@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import City
 from .forms import CityForm
 from project.secrets import *
-from django.contrib.auth.forms import UserCreationForm
+from .forms import SignUpForm
 from django.contrib import messages
 from django.contrib.auth import authenticate
 # Create your views here.
@@ -42,16 +42,18 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        f = UserCreationForm(request.POST)
+        f = SignUpForm(request.POST)
         if f.is_valid():
             f.save()
             username = f.cleaned_data.get('username')
             raw_password = f.cleaned_data.get('password1')
+            first_name =f.cleaned_data.get('first_name')
+            last_name = f.cleaned_data.get('last_name')
+            email = f.cleaned_data.get('email')
             user = authenticate(username=username, password=raw_password)
-            #message.success(request, "Account created successfully")
             return redirect('index')
     else:
-        f = UserCreationForm()
+        f = SignUpForm()
     return render(request, 'weather/signup.html', {'form': f})
 
 
