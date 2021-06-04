@@ -1,8 +1,11 @@
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import City
 from .forms import CityForm
 from project.secrets import *
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate
 # Create your views here.
 
 def index(request):
@@ -36,3 +39,24 @@ def index(request):
     context = {'weather_data': weather_data, 'form': form}
 
     return render(request, 'weather/weather.html', context)
+
+def signup(request):
+    if request.method == 'POST':
+        f = UserCreationForm(request.POST)
+        if f.is_valid():
+            f.save()
+            username = f.cleaned_data.get('username')
+            raw_password = f.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            #message.success(request, "Account created successfully")
+            return redirect('index')
+    else:
+        f = UserCreationForm()
+    return render(request, 'weather/signup.html', {'form': f})
+
+
+def login(request):
+    pass
+
+def logout(request):
+    pass
