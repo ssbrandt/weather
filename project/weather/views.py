@@ -5,7 +5,7 @@ from .forms import CityForm
 from project.secrets import *
 from .forms import SignUpForm
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 def index(request):
@@ -57,8 +57,21 @@ def signup(request):
     return render(request, 'weather/signup.html', {'form': f})
 
 
-def login(request):
-    pass
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
 
-def logout(request):
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            login(request, user)
+            return redirect('index')
+        else:
+            return render(request, "weather/login.html", {
+                    "message": "Invalid Credentials"
+                })
+    return render(request, "weather/login.html")
+
+def logout_view(request):
     pass
