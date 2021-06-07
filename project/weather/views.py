@@ -28,6 +28,7 @@ def index(request):
         r = requests.get(url.format(city)).json()
 
         city_weather = {
+            'id' : city.id,
             'city': city.name,
             'temperature': r["main"]['temp'],
             'description': r["weather"][0]["description"],
@@ -76,3 +77,10 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, "weather/weather.html")
+
+
+def delete_city(request, city_id):
+    city = City.objects.get(pk=city_id)
+    city.delete()
+
+    return redirect('index')

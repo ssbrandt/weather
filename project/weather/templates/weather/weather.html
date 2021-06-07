@@ -55,6 +55,9 @@
                                     <span class="subtitle">{{ city_weather.temperature}}</span>
                                     <br> {{ city_weather.description}}
                                 </p>
+                                <p>
+                                  <a href="{% url 'deletecity' city_weather.id %}">Delete City</a>
+                                </p>
                             </div>
                         </div>
                     </article>
